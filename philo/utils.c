@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faoriol <faoriol@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 19:11:46 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/09 19:11:46 by faoriol          ###   ########.fr       */
+/*   Created: 2025/04/10 22:48:39 by faoriol           #+#    #+#             */
+/*   Updated: 2025/04/10 22:48:39 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	get_time(void)
 {
-	t_infos		infos;
-	t_thread	*thread;
+	struct timeval	tv;
 
-	thread = NULL;
-	collect_infos(argc, argv, &infos);
-	init_thread(&infos, &thread);
-	free(thread);
-	return (EXIT_SUCCESS);
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	clean_exit(void *data, char *msg)
+{
+	if (data)
+		free(data);
+	printf("%s\n", msg);
+	exit(EXIT_FAILURE);
 }
