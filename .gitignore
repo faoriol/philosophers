@@ -1,0 +1,7 @@
+*.exe
+*.out
+a.out
+.vscode
+philo
+objs/
+.idea
