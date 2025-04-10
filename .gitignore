@@ -2,6 +2,6 @@
 *.out
 a.out
 .vscode
-philo
 objs/
 .idea
+philo/philo
