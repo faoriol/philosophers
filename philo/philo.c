@@ -14,7 +14,14 @@
 
 bool	simulation_check(t_thread *thread, int meals, int last_meal)
 {
-	if (get_time() - last_meal < thread->time_to_die)
+	pthread_mutex_lock(thread->infos->dead);
+	if (thread->infos->philo_died == true)
+	{
+		pthread_mutex_unlock(thread->infos->dead);
+		return (false);
+	}
+	pthread_mutex_unlock(thread->infos->dead);
+	if (get_time() - last_meal > thread->time_to_die)
 	{
 		philo_died(thread);
 		return (false);

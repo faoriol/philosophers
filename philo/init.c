@@ -31,6 +31,7 @@ void	check_args(int argc, char **argv)
 void	collect_infos(int argc, char **argv, t_infos *infos)
 {
 	check_args(argc, argv);
+	infos->philo_died = false;
 	infos->nb_philos = ft_atol(argv[1]);
 	infos->time_to_die = ft_atol(argv[2]);
 	infos->time_to_eat = ft_atol(argv[3]);
@@ -70,6 +71,7 @@ void	init_mutex(t_thread *thread)
 		clean_exit(thread, NULL, NULL);
 	while (index < thread->infos->nb_philos)
 		pthread_mutex_init(&thread->infos->forks[index++], NULL);
+	pthread_mutex_init(thread->infos->dead, NULL);
 }
 
 void	init_thread(t_thread *thread)

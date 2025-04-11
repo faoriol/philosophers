@@ -40,6 +40,7 @@ int	main(int argc, char **argv)
 	thread = malloc(sizeof(t_thread) * infos.nb_philos);
 	if (!thread)
 		exit(EXIT_FAILURE);
+	memset(thread, 0, sizeof(t_thread) * infos.nb_philos);
 	thread->infos = &infos;
 	init_mutex(thread);
 	init_thread(thread);

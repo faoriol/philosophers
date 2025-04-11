@@ -24,12 +24,14 @@
 
 typedef struct	s_infos
 {
-	int	nb_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	max_meals;
+	int				nb_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				max_meals;
+	bool			philo_died;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*dead;
 }				t_infos;
 
 typedef struct	s_thread

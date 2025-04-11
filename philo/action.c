@@ -54,4 +54,7 @@ void	philo_died(t_thread *thread)
 
 	time = get_time();
 	printf("%d %d died\n", time, thread->nb);
+	pthread_mutex_lock(thread->infos->dead);
+	thread->infos->philo_died = true;
+	pthread_mutex_unlock(thread->infos->dead);
 }
