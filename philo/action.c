@@ -19,8 +19,10 @@ void	philo_eat(t_thread *thread, int *meals, int *last_meal)
 	time = get_time();
 	printf("%d %d is eating\n", time, thread->nb);
 	(*meals)++;
+	if ((*meals) == thread->infos->max_meals && (*meals) != 0)
+		thread->infos->philo_full++;
 	(*last_meal) = time;
-	usleep(thread->time_to_eat);
+	usleep(thread->infos->time_to_eat * 1000);
 }
 
 void	philo_think(t_thread *thread)
@@ -37,7 +39,7 @@ void	philo_sleep(t_thread *thread)
 
 	time = get_time();
 	printf("%d %d is sleeping\n", time, thread->nb);
-	usleep(thread->time_to_sleep);
+	usleep(thread->infos->time_to_sleep * 1000);
 }
 
 void	philo_take(t_thread *thread)
@@ -54,7 +56,4 @@ void	philo_died(t_thread *thread)
 
 	time = get_time();
 	printf("%d %d died\n", time, thread->nb);
-	pthread_mutex_lock(thread->infos->dead);
-	thread->infos->philo_died = true;
-	pthread_mutex_unlock(thread->infos->dead);
 }

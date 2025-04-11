@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-bool	simulation_check(t_thread *thread, int meals, int last_meal)
+bool	simulation_check(t_thread *thread, int last_meal)
 {
 	pthread_mutex_lock(thread->infos->dead);
 	if (thread->infos->philo_died == true)
@@ -20,17 +20,21 @@ bool	simulation_check(t_thread *thread, int meals, int last_meal)
 		pthread_mutex_unlock(thread->infos->dead);
 		return (false);
 	}
-	pthread_mutex_unlock(thread->infos->dead);
-	if (get_time() - last_meal > thread->time_to_die)
+	if (get_time() - last_meal >= thread->infos->time_to_die)
 	{
+		thread->infos->philo_died = true;
 		philo_died(thread);
+		pthread_mutex_unlock(thread->infos->dead);
 		return (false);
 	}
-	if (meals == thread->max_meals)
+	if (thread->infos->philo_full == thread->infos->nb_philos)
 	{
-		printf("meals are epuised\n");
+		printf("%d meals are epuised\n", get_time());
+		thread->infos->philo_died = true;
+		pthread_mutex_unlock(thread->infos->dead);
 		return (false);
 	}
+	pthread_mutex_unlock(thread->infos->dead);
 	return (true);
 }
 
@@ -42,8 +46,8 @@ void	*routine(void *arg)
 
 	thread = (t_thread *)arg;
 	meals = 0;
-	last_meal = 0;
-	while (simulation_check(thread, meals, last_meal))
+	last_meal = get_time();
+	while (simulation_check(thread, last_meal))
 	{
 		lock(thread);
 		philo_take(thread);

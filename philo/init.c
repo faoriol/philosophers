@@ -12,26 +12,27 @@
 
 #include "philo.h"
 
-void	check_args(int argc, char **argv)
+void	check_args(int argc, char **argv, t_infos *infos)
 {
 	int	value;
 	int	index;
 
 	index = 0;
 	if (argc < 5)
-		clean_exit(NULL, NULL, "error: missing arguments");
+		clean_exit(infos, NULL, "error: missing arguments");
 	while (argv[index])
 	{
 		value = ft_atol(argv[index++]);
 		if (value < 0)
-			clean_exit(NULL, NULL, "error: negative value");
+			clean_exit(infos, NULL, "error: negative value");
 	}
 }
 
 void	collect_infos(int argc, char **argv, t_infos *infos)
 {
-	check_args(argc, argv);
+	check_args(argc, argv, infos);
 	infos->philo_died = false;
+	infos->philo_full = 0;
 	infos->nb_philos = ft_atol(argv[1]);
 	infos->time_to_die = ft_atol(argv[2]);
 	infos->time_to_eat = ft_atol(argv[3]);
@@ -42,7 +43,23 @@ void	collect_infos(int argc, char **argv, t_infos *infos)
 		infos->max_meals = -1;
 }
 
-bool	set_value(t_infos *infos, t_thread *thread)
+void	init_mutex(t_infos *infos)
+{
+	int	index;
+
+	index = 0;
+	infos->forks = malloc(sizeof(pthread_mutex_t) * infos->nb_philos);
+	if (!infos->forks)
+		clean_exit(NULL, NULL, NULL);
+	infos->dead = malloc(sizeof(pthread_mutex_t));
+	if (!infos->dead)
+		clean_exit(infos->forks, infos, NULL);
+	while (index < infos->nb_philos)
+		pthread_mutex_init(&infos->forks[index++], NULL);
+	pthread_mutex_init(infos->dead, NULL);
+}
+
+void	init_thread(t_thread *thread, t_infos *infos)
 {
 	int			index;
 
@@ -50,48 +67,9 @@ bool	set_value(t_infos *infos, t_thread *thread)
 	while (index < infos->nb_philos)
 	{
 		thread[index].nb = index;
-		thread[index].time_to_die = infos->time_to_die;
-		thread[index].time_to_eat = infos->time_to_eat;
-		thread[index].time_to_sleep = infos->time_to_sleep;
-		thread[index].max_meals = infos->max_meals;
+		thread[index].infos = infos;
 		thread[index].left_fork = &infos->forks[index];
 		thread[index].right_fork = &infos->forks[(index + 1) % infos->nb_philos];
-		index++;
-	}
-	return (true);
-}
-
-void	init_mutex(t_thread *thread)
-{
-	int	index;
-
-	index = 0;
-	thread->infos->forks = malloc(sizeof(pthread_mutex_t) * thread->infos->nb_philos);
-	if (!thread->infos->forks)
-		clean_exit(thread, NULL, NULL);
-	while (index < thread->infos->nb_philos)
-		pthread_mutex_init(&thread->infos->forks[index++], NULL);
-	pthread_mutex_init(thread->infos->dead, NULL);
-}
-
-void	init_thread(t_thread *thread)
-{
-	int	index;
-
-	index = 0;
-	if (!set_value(thread->infos, thread))
-		clean_exit(thread->infos->forks, thread, NULL);
-	while (index < thread->infos->nb_philos)
-	{
-		if (pthread_create(&thread[index].philo, NULL, &routine, &thread[index]) != 0)
-			clean_exit(thread->infos->forks, thread, "error: pthread_create failed");
-		index++;
-	}
-	index = 0;
-	while (index < thread->infos->nb_philos)
-	{
-		if (pthread_join(thread[index].philo, NULL) != 0)
-			clean_exit(thread->infos->forks, thread, "error: pthread_create failed");
 		index++;
 	}
 }

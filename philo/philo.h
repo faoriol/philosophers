@@ -29,6 +29,7 @@ typedef struct	s_infos
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
+	int				philo_full;
 	bool			philo_died;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*dead;
@@ -39,10 +40,6 @@ typedef struct	s_thread
 	t_infos			*infos;
 	int				nb;
 	pthread_t		philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				max_meals;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }				t_thread;
@@ -52,17 +49,16 @@ void	philo_think(t_thread *thread);
 void	philo_sleep(t_thread *thread);
 void	philo_take(t_thread *thread);
 void	clean_exit(void *data, void *data2, char *msg);
-void	check_args(int argc, char **argv);
+void	check_args(int argc, char **argv, t_infos *infos);
 void	collect_infos(int argc, char **argv, t_infos *infos);
 int		get_time(void);
-bool	simulation_check(t_thread *thread, int meals, int last_meal);
-bool	set_value(t_infos *infos, t_thread *thread);
-void	init_thread(t_thread *thread);
+bool	simulation_check(t_thread *thread, int last_meal);
+void	init_thread(t_thread *thread, t_infos *infos);
 long	ft_atol(const char *str);
 void	philo_died(t_thread *thread);
 void	*routine(void *arg);
 void	lock(t_thread *thread);
 void	unlock(t_thread *thread);
-void	init_mutex(t_thread *thread);
+void	init_mutex(t_infos *infos);
 
 #endif
