@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   locker.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faoriol <faoriol@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 22:48:39 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/10 22:48:39 by faoriol          ###   ########.fr       */
+/*   Created: 2025/04/11 01:24:32 by faoriol           #+#    #+#             */
+/*   Updated: 2025/04/11 01:24:32 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	get_time(void)
+void	lock(t_thread *thread)
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	if (thread->nb % 2 == 0)
+	{
+		pthread_mutex_lock(thread->left_fork);
+		pthread_mutex_lock(thread->right_fork);
+	}
+	else
+	{
+		pthread_mutex_lock(thread->right_fork);
+		pthread_mutex_lock(thread->left_fork);
+	}
 }
 
-void	clean_exit(void *data, void *data2, char *msg)
+void	unlock(t_thread *thread)
 {
-	if (data)
-		free(data);
-	if (data2)
-		free(data2);
-	if (msg)
-		printf("%s\n", msg);
-	exit(EXIT_FAILURE);
+	pthread_mutex_unlock(thread->right_fork);
+	pthread_mutex_unlock(thread->left_fork);
 }

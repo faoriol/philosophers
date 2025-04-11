@@ -5,8 +5,8 @@ CFLAGS			=	-Wall -Wextra -Werror -g3
 SRC_DIR			=	./
 OBJ_DIR			=	objs/
 
-SRC_FILES		=	philo.c atol.c action.c \
-					init.c simulation.c utils.c
+SRC_FILES		=	main.c atol.c action.c \
+					init.c philo.c utils.c locker.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 
