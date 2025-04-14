@@ -51,12 +51,16 @@ void	init_mutex(t_infos *infos)
 	infos->forks = malloc(sizeof(pthread_mutex_t) * infos->nb_philos);
 	if (!infos->forks)
 		clean_exit(NULL, NULL, NULL);
-	infos->dead = malloc(sizeof(pthread_mutex_t));
-	if (!infos->dead)
+	infos->stop = malloc(sizeof(pthread_mutex_t));
+	if (!infos->stop)
+		clean_exit(infos->forks, infos, NULL);
+	infos->meal_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!infos->meal_mutex)
 		clean_exit(infos->forks, infos, NULL);
 	while (index < infos->nb_philos)
 		pthread_mutex_init(&infos->forks[index++], NULL);
-	pthread_mutex_init(infos->dead, NULL);
+	pthread_mutex_init(infos->stop, NULL);
+	pthread_mutex_init(infos->meal_mutex, NULL);
 }
 
 void	init_thread(t_thread *thread, t_infos *infos)

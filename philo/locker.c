@@ -28,6 +28,6 @@ void	lock(t_thread *thread)
 
 void	unlock(t_thread *thread)
 {
-	pthread_mutex_unlock(thread->right_fork);
 	pthread_mutex_unlock(thread->left_fork);
+	pthread_mutex_unlock(thread->right_fork);
 }

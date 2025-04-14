@@ -18,17 +18,10 @@ void	detach_thread(t_thread *thread)
 
 	index = 0;
 	while (index < thread->infos->nb_philos)
-	{
-		pthread_mutex_destroy(&thread->infos->forks[index]);
-		index++;
-	}
+		pthread_mutex_destroy(&thread->infos->forks[index++]);
 	index = 0;
 	while (index < thread->infos->nb_philos)
-	{
-		if (pthread_detach(thread[index].philo) != 0)
-			printf("bug\n");
-		index++;
-	}
+		pthread_detach(thread[index++].philo);
 }
 
 void	start_thread(t_thread *thread)
@@ -67,10 +60,6 @@ int	main(int argc, char **argv)
 	init_mutex(infos);
 	init_thread(thread, infos);
 	start_thread(thread);
-	// detach_thread(thread);
-	free(infos->forks);
-	free(infos->dead);
-	free(infos);
-	free(thread);
+	clean_thread(thread);
 	return (EXIT_SUCCESS);
 }

@@ -30,3 +30,12 @@ void	clean_exit(void *data, void *data2, char *msg)
 		printf("%s\n", msg);
 	exit(EXIT_FAILURE);
 }
+
+void	clean_thread(t_thread *thread)
+{
+	free(thread->infos->forks);
+	free(thread->infos->stop);
+	free(thread->infos->meal_mutex);
+	free(thread->infos);
+	free(thread);
+}

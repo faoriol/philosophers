@@ -13,10 +13,9 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-
-#include <stdio.h>
-#include <pthread.h>
-#include <stdlib.h>
+# include <stdio.h>
+# include <pthread.h>
+# include <stdlib.h>
 # include <stdbool.h>
 # include <unistd.h>
 # include <sys/time.h>
@@ -32,7 +31,8 @@ typedef struct	s_infos
 	int				philo_full;
 	bool			philo_died;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	*dead;
+	pthread_mutex_t	*stop;
+	pthread_mutex_t	*meal_mutex;
 }				t_infos;
 
 typedef struct	s_thread
@@ -60,5 +60,6 @@ void	*routine(void *arg);
 void	lock(t_thread *thread);
 void	unlock(t_thread *thread);
 void	init_mutex(t_infos *infos);
+void	clean_thread(t_thread *thread);
 
 #endif
