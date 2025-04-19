@@ -12,58 +12,38 @@
 
 #include "philo.h"
 
-void	philo_eat(t_thread *thread, int *meals, int *last_meal)
+void	philo_eat(t_thread *thread)
 {
-	int	time;
-
 	lock(thread);
-	philo_take(thread);
-	time = get_time();
-	printf("%d %d is eating\n", time, thread->nb);
-	pthread_mutex_lock(thread->infos->meal_mutex);
-	(*meals)++;
-	(*last_meal) = time;
-	if ((*meals) == thread->infos->max_meals && (*meals) != 0)
-	{
-		pthread_mutex_lock(thread->infos->stop);
-		thread->infos->philo_full++;
-		pthread_mutex_unlock(thread->infos->stop);
-	}
-	pthread_mutex_unlock(thread->infos->meal_mutex);
-	usleep(thread->infos->time_to_eat * 1000);
+	mutex_print(thread, "is eating", thread->infos.start_time);
+	pthread_mutex_lock(thread->infos.meal_mutex);
+	thread->meal++;
+	thread->last_meal = get_time();
+	pthread_mutex_unlock(thread->infos.meal_mutex);
+	usleep(thread->time_to_eat * 1000);
 	unlock(thread);
 }
 
 void	philo_think(t_thread *thread)
 {
-	int	time;
-
-	time = get_time();
-	printf("%d %d is thinking\n", time, thread->nb);
+	mutex_print(thread, "is thinking", thread->infos.start_time);
 }
 
 void	philo_sleep(t_thread *thread)
 {
-	int	time;
-
-	time = get_time();
-	printf("%d %d is sleeping\n", time, thread->nb);
-	usleep(thread->infos->time_to_sleep * 1000);
+	mutex_print(thread, "is sleeping", thread->infos.start_time);
+	usleep(thread->time_to_sleep * 1000);
 }
 
 void	philo_take(t_thread *thread)
 {
-	int	time;
-
-	time = get_time();
-	printf("%d %d has taken a fork\n", time, thread->nb);
-	printf("%d %d has taken a fork\n", time, thread->nb);
+	mutex_print(thread, "has taken a fork", thread->infos.start_time);
 }
 
 void	philo_died(t_thread *thread)
 {
-	int	time;
-
-	time = get_time();
-	printf("%d %d died\n", time, thread->nb);
+	mutex_print(thread, "died", thread->infos.start_time);
+	pthread_mutex_lock(thread->infos.stop_mutex);
+	thread->infos.philo_died = true;
+	pthread_mutex_unlock(thread->infos.stop_mutex);
 }

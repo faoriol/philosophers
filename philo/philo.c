@@ -12,50 +12,49 @@
 
 #include "philo.h"
 
-bool	simulation_check(t_thread *thread, int last_meal)
+bool	simulation_check(t_thread *thread)
 {
-	pthread_mutex_lock(thread->infos->stop);
-	if (thread->infos->philo_died)
-	{
-		pthread_mutex_unlock(thread->infos->stop);
+	int		max;
+	bool	died;
+
+	died = get_is_philo_died(thread);
+	if (died)
 		return (false);
-	}
-	if (get_time() - last_meal >= thread->infos->time_to_die)
+	if (get_time() - thread->last_meal >= thread->time_to_die)
 	{
-		usleep(thread->infos->time_to_die * 1000);
 		philo_died(thread);
-		pthread_mutex_unlock(thread->infos->stop);
 		return (false);
 	}
-	if (thread->infos->philo_full == thread->infos->nb_philos)
-	{
-		pthread_mutex_unlock(thread->infos->stop);
+	max = get_max_meal(thread);
+	if (thread->meal == max)
 		return (false);
-	}
-	pthread_mutex_unlock(thread->infos->stop);
 	return (true);
 }
+
+// int	wait_threads(t_thread *thread)
+// {
+// 	int			seated;
+
+// 	seated = get_seated_philo(thread);
+// 	if (seated != thread->nb_philos)
+// 		return (0);
+// 	return (1);
+// }
 
 void	*routine(void *arg)
 {
 	t_thread	*thread;
-	int			meals;
-	int			last_meal;
+	// int			add_ready;
 
 	thread = (t_thread *)arg;
-	meals = 0;
-	last_meal = get_time();
-	if (thread->infos->nb_philos == 1)
+	thread->last_meal = get_time();
+	// add_ready = get_seated_philo(thread) + 1;
+	// set_waiting_philo(thread, &add_ready);
+	// while (!wait_threads(thread))
+		// ;
+	while (simulation_check(thread))
 	{
-		pthread_mutex_lock(&thread->infos->forks[0]);
-		usleep(thread->infos->time_to_die * 1000);
-		pthread_mutex_unlock(&thread->infos->forks[0]);
-		philo_died(thread);
-		return (NULL);
-	}
-	while (simulation_check(thread, last_meal))
-	{
-		philo_eat(thread, &meals, &last_meal);
+		philo_eat(thread);
 		philo_sleep(thread);
 		philo_think(thread);
 	}

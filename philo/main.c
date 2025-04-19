@@ -12,54 +12,50 @@
 
 #include "philo.h"
 
-void	detach_thread(t_thread *thread)
+// void	detach_thread(t_thread *thread)
+// {
+// 	int	index;
+
+// 	index = 0;
+// 	while (index < thread->infos->nb_philos)
+// 		pthread_mutex_destroy(&thread->infos->forks->fork_mutex[index++]);
+// 	index = 0;
+// 	while (index < thread->infos->nb_philos)
+// 		pthread_detach(thread[index++].philo);
+// }
+
+bool	start_thread(t_thread *thread)
 {
 	int	index;
 
 	index = 0;
-	while (index < thread->infos->nb_philos)
-		pthread_mutex_destroy(&thread->infos->forks[index++]);
-	index = 0;
-	while (index < thread->infos->nb_philos)
-		pthread_detach(thread[index++].philo);
-}
-
-void	start_thread(t_thread *thread)
-{
-	int	index;
-
-	index = 0;
-	while (index < thread->infos->nb_philos)
+	while (index < thread->nb_philos)
 	{
 		if (pthread_create(&thread[index].philo, NULL, &routine, &thread[index]) != 0)
-			clean_exit(thread->infos->forks, thread, "error: pthread_create failed");
+			return (false);
 		index++;
 	}
 	index = 0;
-	while (index < thread->infos->nb_philos)
+	while (index < thread->nb_philos)
 	{
 		if (pthread_join(thread[index].philo, NULL) != 0)
-			clean_exit(thread->infos->forks, thread, "error: pthread_create failed");
+			return (false);
 		index++;
 	}
+	return (true);
 }
 
 int	main(int argc, char **argv)
 {
 	t_thread	*thread;
-	t_infos		*infos;
+	t_fork		*forks;
+	t_infos		infos;
 
-	infos = malloc(sizeof(t_infos));
-	if(!infos)
-		exit(EXIT_FAILURE);
-	memset(infos, 0, sizeof(t_infos));
-	collect_infos(argc, argv, infos);
-	thread = malloc(sizeof(t_thread) * infos->nb_philos);
-	if (!thread)
-		clean_exit(infos, NULL, NULL);
-	init_mutex(infos);
-	init_thread(thread, infos);
+	collect_infos(argc, argv, &infos);
+	thread = malloc(sizeof(t_thread) * ft_atol(argv[1]));
+	init_mutex(&infos, &forks);
+	init_thread(thread, infos, forks, argv);
 	start_thread(thread);
-	clean_thread(thread);
+	// clean_thread(thread);
 	return (EXIT_SUCCESS);
 }

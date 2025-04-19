@@ -21,6 +21,12 @@
 # include <sys/time.h>
 # include <string.h>
 
+typedef struct	s_fork
+{
+	bool			state;
+	pthread_mutex_t	*fork_mutex;
+}				t_fork;
+
 typedef struct	s_infos
 {
 	int				nb_philos;
@@ -30,36 +36,52 @@ typedef struct	s_infos
 	int				max_meals;
 	int				philo_full;
 	bool			philo_died;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*stop;
+	int				start_time;
+	int				waiting_philo;
+	pthread_mutex_t	*stop_mutex;
 	pthread_mutex_t	*meal_mutex;
+	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*wait_mutex;
 }				t_infos;
 
 typedef struct	s_thread
 {
-	t_infos			*infos;
+	t_infos			infos;
 	int				nb;
+	int				meal;
 	pthread_t		philo;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	t_fork			*left_fork;
+	t_fork			*right_fork;
+	int				last_meal;
+	int				nb_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 }				t_thread;
 
-void	philo_eat(t_thread *thread, int *meals, int *last_meal);
+
+void	philo_eat(t_thread *thread);
 void	philo_think(t_thread *thread);
 void	philo_sleep(t_thread *thread);
 void	philo_take(t_thread *thread);
+void	philo_died(t_thread *thread);
 void	clean_exit(void *data, void *data2, char *msg);
 void	check_args(int argc, char **argv, t_infos *infos);
 void	collect_infos(int argc, char **argv, t_infos *infos);
 int		get_time(void);
-bool	simulation_check(t_thread *thread, int last_meal);
-void	init_thread(t_thread *thread, t_infos *infos);
+bool	simulation_check(t_thread *thread);
+bool	init_thread(t_thread *thread, t_infos infos, t_fork *forks, char **argv);
 long	ft_atol(const char *str);
-void	philo_died(t_thread *thread);
 void	*routine(void *arg);
 void	lock(t_thread *thread);
 void	unlock(t_thread *thread);
-void	init_mutex(t_infos *infos);
+bool	init_mutex(t_infos *infos, t_fork **forks);
 void	clean_thread(t_thread *thread);
+void	mutex_print(t_thread *thread, char *msg, int last_meal);
+
+int	get_max_meal(t_thread *thread);
+void	set_waiting_philo(t_thread *thread, int *value);
+int	get_seated_philo(t_thread *thread);
+int	get_is_philo_died(t_thread *thread);
 
 #endif

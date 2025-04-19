@@ -6,7 +6,7 @@ SRC_DIR			=	./
 OBJ_DIR			=	objs/
 
 SRC_FILES		=	main.c atol.c action.c \
-					init.c philo.c utils.c locker.c
+					init.c philo.c utils.c locker.c getter.c setter.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 

@@ -31,11 +31,18 @@ void	clean_exit(void *data, void *data2, char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	clean_thread(t_thread *thread)
+// void	clean_thread(t_thread *thread)
+// {
+// 	free(thread->infos->forks);
+// 	free(thread->infos->stop_mutex);
+// 	free(thread->infos->meal_mutex);
+// 	free(thread->infos);
+// 	free(thread);
+// }
+
+void	mutex_print(t_thread *thread, char *msg, int last_meal)
 {
-	free(thread->infos->forks);
-	free(thread->infos->stop);
-	free(thread->infos->meal_mutex);
-	free(thread->infos);
-	free(thread);
+	pthread_mutex_lock(thread->infos.print_mutex);
+	printf("%d %d %s\n", get_time() - last_meal, thread->nb, msg);
+	pthread_mutex_unlock(thread->infos.print_mutex);
 }
