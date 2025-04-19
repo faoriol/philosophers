@@ -31,6 +31,7 @@ void	check_args(int argc, char **argv, t_infos *infos)
 void	collect_infos(int argc, char **argv, t_infos *infos)
 {
 	check_args(argc, argv, infos);
+	infos->waiting_philo = 0;
 	infos->philo_died = false;
 	infos->philo_full = 0;
 	infos->start_time = get_time();
@@ -71,18 +72,18 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 	return (true);
 }
 
-bool	init_thread(t_thread *thread, t_infos infos, t_fork *forks, char **argv)
+bool	init_thread(t_thread *thread, t_infos *infos, t_fork *forks, char **argv)
 {
 	int			index;
 
 	index = 0;
-	while (index < infos.nb_philos)
+	while (index < infos->nb_philos)
 	{
 		thread[index].meal = 0;
 		thread[index].nb = index + 1;
 		thread[index].infos = infos;
 		thread[index].left_fork = &forks[index];
-		thread[index].right_fork = &forks[(index + 1) % infos.nb_philos];
+		thread[index].right_fork = &forks[(index + 1) % infos->nb_philos];
 		thread[index].left_fork->state = true;
 		thread[index].right_fork->state = true;
 		thread[index].nb_philos = ft_atol(argv[1]);

@@ -49,13 +49,21 @@ int	main(int argc, char **argv)
 {
 	t_thread	*thread;
 	t_fork		*forks;
-	t_infos		infos;
+	t_infos		*infos;
 
-	collect_infos(argc, argv, &infos);
+	forks = NULL;
+	infos = malloc(sizeof(t_infos));
+	memset(infos, 0, sizeof(t_infos));
+	if (!infos)
+		exit(EXIT_FAILURE);
+	collect_infos(argc, argv, infos);
 	thread = malloc(sizeof(t_thread) * ft_atol(argv[1]));
-	init_mutex(&infos, &forks);
+	memset(thread, 0, sizeof(t_thread));
+	if (!thread)
+		free_all(thread, infos, forks);
+	init_mutex(infos, &forks);
 	init_thread(thread, infos, forks, argv);
 	start_thread(thread);
-	// clean_thread(thread);
+	free_all(thread, infos, forks);
 	return (EXIT_SUCCESS);
 }

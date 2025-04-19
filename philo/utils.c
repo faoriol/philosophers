@@ -42,7 +42,21 @@ void	clean_exit(void *data, void *data2, char *msg)
 
 void	mutex_print(t_thread *thread, char *msg, int last_meal)
 {
-	pthread_mutex_lock(thread->infos.print_mutex);
+	pthread_mutex_lock(thread->infos->print_mutex);
 	printf("%d %d %s\n", get_time() - last_meal, thread->nb, msg);
-	pthread_mutex_unlock(thread->infos.print_mutex);
+	pthread_mutex_unlock(thread->infos->print_mutex);
+}
+
+void	ft_usleep(t_thread *thread, long time_to)
+{
+	int	time;
+
+	time = get_time();
+	while ((get_time() - time) < (time_to / 1000))
+	{
+		if (!simulation_check(thread))
+			return ;
+		else
+			usleep(10);
+	}
 }

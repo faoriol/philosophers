@@ -15,48 +15,42 @@
 bool	simulation_check(t_thread *thread)
 {
 	int		max;
-	bool	died;
-
-	died = get_is_philo_died(thread);
-	if (died)
+	if (get_is_philo_died(thread))
 		return (false);
-	if (get_time() - thread->last_meal >= thread->time_to_die)
+	pthread_mutex_lock(thread->infos->stop_mutex);
+	if (get_time() - thread->last_meal > thread->time_to_die)
 	{
 		philo_died(thread);
+		thread->infos->philo_died = true;
+		pthread_mutex_unlock(thread->infos->stop_mutex);
 		return (false);
 	}
+	pthread_mutex_unlock(thread->infos->stop_mutex);
 	max = get_max_meal(thread);
 	if (thread->meal == max)
 		return (false);
 	return (true);
 }
 
-// int	wait_threads(t_thread *thread)
-// {
-// 	int			seated;
-
-// 	seated = get_seated_philo(thread);
-// 	if (seated != thread->nb_philos)
-// 		return (0);
-// 	return (1);
-// }
-
 void	*routine(void *arg)
 {
 	t_thread	*thread;
-	// int			add_ready;
 
 	thread = (t_thread *)arg;
 	thread->last_meal = get_time();
-	// add_ready = get_seated_philo(thread) + 1;
-	// set_waiting_philo(thread, &add_ready);
-	// while (!wait_threads(thread))
-		// ;
+	// set_waiting_philo(thread);
+	// while (get_seated_philo(thread) != thread->nb_philos)
+	// 	;
+	if (thread->nb % 2 == 1)
+		usleep(thread->time_to_eat / 2);
 	while (simulation_check(thread))
 	{
-		philo_eat(thread);
-		philo_sleep(thread);
-		philo_think(thread);
+		if (!philo_eat(thread))
+			break ;
+		if (!philo_sleep(thread))
+			break ;
+		if (!philo_think(thread))
+			break ;
 	}
 	return (NULL);
 }
