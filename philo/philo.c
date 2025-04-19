@@ -15,9 +15,13 @@
 bool	simulation_check(t_thread *thread)
 {
 	int		max;
-	if (get_is_philo_died(thread))
-		return (false);
+
 	pthread_mutex_lock(thread->infos->stop_mutex);
+	if (thread->infos->philo_died == true)
+	{
+		pthread_mutex_unlock(thread->infos->stop_mutex);
+		return (false);
+	}
 	if (get_time() - thread->last_meal > thread->time_to_die)
 	{
 		philo_died(thread);
