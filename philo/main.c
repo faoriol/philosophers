@@ -31,7 +31,8 @@ bool	start_thread(t_thread *thread)
 	index = 0;
 	while (index < thread->nb_philos)
 	{
-		if (pthread_create(&thread[index].philo, NULL, &routine, &thread[index]) != 0)
+		if (pthread_create(&thread[index].philo,
+				NULL, &routine, &thread[index]) != 0)
 			return (false);
 		index++;
 	}

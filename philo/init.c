@@ -48,25 +48,25 @@ void	collect_infos(int argc, char **argv, t_infos *infos)
 bool	alloc_mutex(t_infos *infos, t_fork **forks)
 {
 	int		index;
-	bool	check;
+	bool	c;
 
-	check = true;
+	c = true;
 	(*forks) = malloc(sizeof(t_fork) * infos->nb_philos);
 	if (!(*forks))
 		return (false);
 	index = 0;
 	memset(*forks, 0, sizeof(t_fork));
-	infos->stop_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
-	infos->meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
-	infos->print_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
-	infos->wait_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
-	infos->table_meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+	infos->stop_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
+	infos->meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
+	infos->print_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
+	infos->wait_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
+	infos->table_meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
 	while (index < infos->nb_philos)
 	{
-		(*forks)[index].fork_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+		(*forks)[index].fork_mutex = safe_alloc(sizeof(pthread_mutex_t), &c);
 		index++;
 	}
-	if (check == false)
+	if (c == false)
 	{
 		free_mutexes(infos, *forks, infos->nb_philos);
 		return (false);
@@ -86,16 +86,17 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 		if (pthread_mutex_init((*forks)[index++].fork_mutex, NULL))
 			return (free_all(NULL, infos, *forks, false));
 	}
-	if (pthread_mutex_init(infos->stop_mutex, NULL) ||
-		pthread_mutex_init(infos->meal_mutex, NULL) ||
-		pthread_mutex_init(infos->print_mutex, NULL) ||
-		pthread_mutex_init(infos->wait_mutex, NULL) ||
-		pthread_mutex_init(infos->table_meal_mutex, NULL))
+	if (pthread_mutex_init(infos->stop_mutex, NULL)
+		|| pthread_mutex_init(infos->meal_mutex, NULL)
+		|| pthread_mutex_init(infos->print_mutex, NULL)
+		|| pthread_mutex_init(infos->wait_mutex, NULL)
+		|| pthread_mutex_init(infos->table_meal_mutex, NULL))
 		return (free_all(NULL, infos, *forks, false));
 	return (true);
 }
 
-bool	init_thread(t_thread *thread, t_infos *infos, t_fork *forks, char **argv)
+bool	init_thread(t_thread *thread,
+	t_infos *infos, t_fork *forks, char **argv)
 {
 	int			index;
 

@@ -26,7 +26,6 @@ void	unlock(t_thread *thread)
 {
 	pthread_mutex_unlock(thread->left_fork->fork_mutex);
 	pthread_mutex_unlock(thread->right_fork->fork_mutex);
-	
 	thread->left_fork->state = true;
 	thread->right_fork->state = true;
 }
@@ -39,4 +38,14 @@ int	getter(int value, pthread_mutex_t *mutex)
 	i = value;
 	pthread_mutex_unlock(mutex);
 	return (i);
+}
+
+void	drop_fork(t_thread *thread)
+{
+	pthread_mutex_lock(thread->left_fork->fork_mutex);
+	thread->left_fork->state = true;
+	pthread_mutex_unlock(thread->left_fork->fork_mutex);
+	pthread_mutex_lock(thread->right_fork->fork_mutex);
+	thread->right_fork->state = true;
+	pthread_mutex_unlock(thread->right_fork->fork_mutex);
 }

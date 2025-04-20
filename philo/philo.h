@@ -21,13 +21,13 @@
 # include <sys/time.h>
 # include <string.h>
 
-typedef struct	s_fork
+typedef struct s_fork
 {
 	bool			state;
 	pthread_mutex_t	*fork_mutex;
 }				t_fork;
 
-typedef struct	s_infos
+typedef struct s_infos
 {
 	int				nb_philos;
 	int				time_to_die;
@@ -45,7 +45,7 @@ typedef struct	s_infos
 	pthread_mutex_t	*wait_mutex;
 }				t_infos;
 
-typedef struct	s_thread
+typedef struct s_thread
 {
 	t_infos			*infos;
 	int				nb;
@@ -60,7 +60,6 @@ typedef struct	s_thread
 	int				time_to_sleep;
 }				t_thread;
 
-
 bool	philo_eat(t_thread *thread);
 bool	philo_think(t_thread *thread);
 bool	philo_sleep(t_thread *thread);
@@ -71,7 +70,8 @@ void	check_args(int argc, char **argv, t_infos *infos);
 void	collect_infos(int argc, char **argv, t_infos *infos);
 int		get_time(void);
 bool	simulation_check(t_thread *thread);
-bool	init_thread(t_thread *thread, t_infos *infos, t_fork *forks, char **argv);
+bool	init_thread(t_thread *thread,
+			t_infos *infos, t_fork *forks, char **argv);
 long	ft_atol(const char *str);
 void	*routine(void *arg);
 void	lock(t_thread *thread);
@@ -80,10 +80,10 @@ bool	init_mutex(t_infos *infos, t_fork **forks);
 void	clean_thread(t_thread *thread);
 void	mutex_print(t_thread *thread, char *msg, int last_meal);
 
-int	get_max_meal(t_thread *thread);
+int		get_max_meal(t_thread *thread);
 void	set_waiting_philo(t_thread *thread);
-int	get_seated_philo(t_thread *thread);
-int	get_is_philo_died(t_thread *thread);
+int		get_seated_philo(t_thread *thread);
+int		get_is_philo_died(t_thread *thread);
 void	set_dead_mutex(t_thread *thread);
 int		free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code);
 void	ft_usleep(t_thread *thread, long time_to);
