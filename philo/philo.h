@@ -74,12 +74,8 @@ bool	init_thread(t_thread *thread,
 			t_infos *infos, t_fork *forks, char **argv);
 long	ft_atol(const char *str);
 void	*routine(void *arg);
-void	lock(t_thread *thread);
-void	unlock(t_thread *thread);
 bool	init_mutex(t_infos *infos, t_fork **forks);
-void	clean_thread(t_thread *thread);
 void	mutex_print(t_thread *thread, char *msg, int last_meal);
-
 int		get_max_meal(t_thread *thread);
 void	set_waiting_philo(t_thread *thread);
 int		get_seated_philo(t_thread *thread);

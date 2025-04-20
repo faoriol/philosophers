@@ -12,34 +12,6 @@
 
 #include "philo.h"
 
-void	lock(t_thread *thread)
-{
-	pthread_mutex_lock(thread->left_fork->fork_mutex);
-	pthread_mutex_lock(thread->right_fork->fork_mutex);
-	thread->left_fork->state = false;
-	thread->right_fork->state = false;
-	philo_take(thread);
-	philo_take(thread);
-}
-
-void	unlock(t_thread *thread)
-{
-	pthread_mutex_unlock(thread->left_fork->fork_mutex);
-	pthread_mutex_unlock(thread->right_fork->fork_mutex);
-	thread->left_fork->state = true;
-	thread->right_fork->state = true;
-}
-
-int	getter(int value, pthread_mutex_t *mutex)
-{
-	int	i;
-
-	pthread_mutex_lock(mutex);
-	i = value;
-	pthread_mutex_unlock(mutex);
-	return (i);
-}
-
 void	drop_fork(t_thread *thread)
 {
 	pthread_mutex_lock(thread->left_fork->fork_mutex);
