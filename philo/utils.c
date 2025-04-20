@@ -60,3 +60,16 @@ void	ft_usleep(t_thread *thread, long time_to)
 			usleep(10);
 	}
 }
+
+void	*safe_alloc(size_t size, bool *check)
+{
+	void	*data;
+
+	data = malloc(size);
+	if (!data)
+	{
+		(*check) = false;
+		return (NULL);
+	}
+	return (data);
+}

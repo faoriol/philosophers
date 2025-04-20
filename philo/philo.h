@@ -85,10 +85,12 @@ void	set_waiting_philo(t_thread *thread);
 int	get_seated_philo(t_thread *thread);
 int	get_is_philo_died(t_thread *thread);
 void	set_dead_mutex(t_thread *thread);
-void	free_all(t_thread *threads, t_infos *infos, t_fork *forks);
+int		free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code);
 void	ft_usleep(t_thread *thread, long time_to);
 int		check_fork(t_fork *fork);
 void	add_table_meal(t_thread *thread);
 int		get_table_meal(t_thread *thread);
+void	*safe_alloc(size_t size, bool *check);
+void	free_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
 
 #endif

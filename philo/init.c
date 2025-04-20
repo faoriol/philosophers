@@ -45,32 +45,53 @@ void	collect_infos(int argc, char **argv, t_infos *infos)
 		infos->max_meals = -1;
 }
 
-bool	init_mutex(t_infos *infos, t_fork **forks)
+bool	alloc_mutex(t_infos *infos, t_fork **forks)
 {
-	int	index;
+	int		index;
+	bool	check;
 
+	check = true;
 	(*forks) = malloc(sizeof(t_fork) * infos->nb_philos);
 	if (!(*forks))
 		return (false);
 	index = 0;
 	memset(*forks, 0, sizeof(t_fork));
-	infos->stop_mutex = malloc(sizeof(pthread_mutex_t));
-	infos->meal_mutex = malloc(sizeof(pthread_mutex_t));
-	infos->print_mutex = malloc(sizeof(pthread_mutex_t));
-	infos->wait_mutex = malloc(sizeof(pthread_mutex_t));
-	infos->table_meal_mutex = malloc(sizeof(pthread_mutex_t));
-
+	infos->stop_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+	infos->meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+	infos->print_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+	infos->wait_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
+	infos->table_meal_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
 	while (index < infos->nb_philos)
 	{
-		(*forks)[index].fork_mutex = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init((*forks)[index].fork_mutex, NULL);
+		(*forks)[index].fork_mutex = safe_alloc(sizeof(pthread_mutex_t), &check);
 		index++;
 	}
-	pthread_mutex_init(infos->stop_mutex, NULL);
-	pthread_mutex_init(infos->meal_mutex, NULL);
-	pthread_mutex_init(infos->print_mutex, NULL);
-	pthread_mutex_init(infos->wait_mutex, NULL);
-	pthread_mutex_init(infos->table_meal_mutex, NULL);
+	if (check == false)
+	{
+		free_mutexes(infos, *forks, infos->nb_philos);
+		return (false);
+	}
+	return (true);
+}
+
+bool	init_mutex(t_infos *infos, t_fork **forks)
+{
+	int	index;
+
+	index = 0;
+	if (alloc_mutex(infos, forks) == false)
+		return (false);
+	while (index < infos->nb_philos)
+	{
+		if (pthread_mutex_init((*forks)[index++].fork_mutex, NULL))
+			return (free_all(NULL, infos, *forks, false));
+	}
+	if (pthread_mutex_init(infos->stop_mutex, NULL) ||
+		pthread_mutex_init(infos->meal_mutex, NULL) ||
+		pthread_mutex_init(infos->print_mutex, NULL) ||
+		pthread_mutex_init(infos->wait_mutex, NULL) ||
+		pthread_mutex_init(infos->table_meal_mutex, NULL))
+		return (free_all(NULL, infos, *forks, false));
 	return (true);
 }
 
