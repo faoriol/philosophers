@@ -92,5 +92,6 @@ void	add_table_meal(t_thread *thread);
 int		get_table_meal(t_thread *thread);
 void	*safe_alloc(size_t size, bool *check);
 void	free_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
+void	drop_fork(t_thread *thread);
 
 #endif

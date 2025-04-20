@@ -61,9 +61,9 @@ int	main(int argc, char **argv)
 	thread = malloc(sizeof(t_thread) * ft_atol(argv[1]));
 	memset(thread, 0, sizeof(t_thread));
 	if (!thread)
-		return (free_all(thread, infos, forks, EXIT_FAILURE));
+		return (free_all(NULL, infos, forks, EXIT_FAILURE));
 	if (init_mutex(infos, &forks) == false)
-		return (free_all(thread, infos, NULL, EXIT_FAILURE));
+		return (EXIT_FAILURE);
 	init_thread(thread, infos, forks, argv);
 	start_thread(thread);
 	free_all(thread, infos, forks, 0);
