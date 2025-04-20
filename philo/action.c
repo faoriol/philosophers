@@ -24,6 +24,8 @@ void	drop_fork(t_thread *thread)
 
 bool	philo_eat(t_thread *thread)
 {
+	int	max;
+
 	while (!check_fork(thread->left_fork))
 		if (!simulation_check(thread))
 			return (false);
@@ -37,6 +39,9 @@ bool	philo_eat(t_thread *thread)
 	mutex_print(thread, "is eating", thread->infos->start_time);
 	thread->meal++;
 	thread->last_meal = get_time();
+	max = get_max_meal(thread);
+	if (thread->meal == max)
+		add_table_meal(thread);
 	if (!simulation_check(thread))
 		return (false);
 	ft_usleep(thread, thread->time_to_eat * 1000);

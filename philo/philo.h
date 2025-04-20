@@ -34,12 +34,13 @@ typedef struct	s_infos
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
-	int				philo_full;
+	int				full_meal;
 	bool			philo_died;
 	int				start_time;
 	int				waiting_philo;
 	pthread_mutex_t	*stop_mutex;
 	pthread_mutex_t	*meal_mutex;
+	pthread_mutex_t	*table_meal_mutex;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*wait_mutex;
 }				t_infos;
@@ -87,4 +88,7 @@ void	set_dead_mutex(t_thread *thread);
 void	free_all(t_thread *threads, t_infos *infos, t_fork *forks);
 void	ft_usleep(t_thread *thread, long time_to);
 int		check_fork(t_fork *fork);
+void	add_table_meal(t_thread *thread);
+int		get_table_meal(t_thread *thread);
+
 #endif

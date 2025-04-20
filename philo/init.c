@@ -33,12 +33,12 @@ void	collect_infos(int argc, char **argv, t_infos *infos)
 	check_args(argc, argv, infos);
 	infos->waiting_philo = 0;
 	infos->philo_died = false;
-	infos->philo_full = 0;
 	infos->start_time = get_time();
 	infos->nb_philos = ft_atol(argv[1]);
 	infos->time_to_die = ft_atol(argv[2]);
 	infos->time_to_eat = ft_atol(argv[3]);
 	infos->time_to_sleep = ft_atol(argv[4]);
+	infos->full_meal = 0;
 	if (argc == 6)
 		infos->max_meals = ft_atol(argv[5]);
 	else
@@ -58,6 +58,7 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 	infos->meal_mutex = malloc(sizeof(pthread_mutex_t));
 	infos->print_mutex = malloc(sizeof(pthread_mutex_t));
 	infos->wait_mutex = malloc(sizeof(pthread_mutex_t));
+	infos->table_meal_mutex = malloc(sizeof(pthread_mutex_t));
 
 	while (index < infos->nb_philos)
 	{
@@ -69,6 +70,7 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 	pthread_mutex_init(infos->meal_mutex, NULL);
 	pthread_mutex_init(infos->print_mutex, NULL);
 	pthread_mutex_init(infos->wait_mutex, NULL);
+	pthread_mutex_init(infos->table_meal_mutex, NULL);
 	return (true);
 }
 

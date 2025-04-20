@@ -14,7 +14,7 @@
 
 bool	simulation_check(t_thread *thread)
 {
-	int		max;
+	int		table_meal;
 
 	pthread_mutex_lock(thread->infos->stop_mutex);
 	if (thread->infos->philo_died == true)
@@ -29,10 +29,14 @@ bool	simulation_check(t_thread *thread)
 		pthread_mutex_unlock(thread->infos->stop_mutex);
 		return (false);
 	}
-	pthread_mutex_unlock(thread->infos->stop_mutex);
-	max = get_max_meal(thread);
-	if (thread->meal == max)
+	table_meal = get_table_meal(thread);
+	if (table_meal == thread->nb_philos)
+	{
+		thread->infos->philo_died = true;
+		pthread_mutex_unlock(thread->infos->stop_mutex);
 		return (false);
+	}
+	pthread_mutex_unlock(thread->infos->stop_mutex);
 	return (true);
 }
 
@@ -42,9 +46,9 @@ void	*routine(void *arg)
 
 	thread = (t_thread *)arg;
 	thread->last_meal = get_time();
-	// set_waiting_philo(thread);
-	// while (get_seated_philo(thread) != thread->nb_philos)
-	// 	;
+	set_waiting_philo(thread);
+	while (get_seated_philo(thread) != thread->nb_philos)
+		;
 	if (thread->nb % 2 == 1)
 		usleep(thread->time_to_eat / 2);
 	while (simulation_check(thread))

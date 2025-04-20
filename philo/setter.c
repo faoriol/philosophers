@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 14:15:29 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/19 19:40:11 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/20 15:14:15 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,14 @@ void	set_waiting_philo(t_thread *thread)
 
 void	set_dead_mutex(t_thread *thread)
 {
-	philo_died(thread);
 	pthread_mutex_lock(thread->infos->stop_mutex);
 	thread->infos->philo_died = true;
 	pthread_mutex_unlock(thread->infos->stop_mutex);
+}
+
+void	add_table_meal(t_thread *thread)
+{
+	pthread_mutex_lock(thread->infos->meal_mutex);
+	thread->infos->full_meal++;
+	pthread_mutex_unlock(thread->infos->meal_mutex);
 }
