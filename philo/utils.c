@@ -40,10 +40,10 @@ void	clean_exit(void *data, void *data2, char *msg)
 // 	free(thread);
 // }
 
-void	mutex_print(t_thread *thread, char *msg, int last_meal)
+void	mutex_print(t_thread *thread, char *msg, int start_time)
 {
 	pthread_mutex_lock(thread->infos->print_mutex);
-	printf("%d %d %s\n", get_time() - last_meal, thread->nb, msg);
+	printf("%d %d %s\n", get_time() - start_time, thread->nb, msg);
 	pthread_mutex_unlock(thread->infos->print_mutex);
 }
 

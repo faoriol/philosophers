@@ -32,8 +32,6 @@ bool	philo_eat(t_thread *thread)
 	max = get_max_meal(thread);
 	if (thread->meal == max)
 		add_table_meal(thread);
-	if (!simulation_check(thread))
-		return (false);
 	ft_usleep(thread, thread->time_to_eat * 1000);
 	if (!simulation_check(thread))
 		return (false);

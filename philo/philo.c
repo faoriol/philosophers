@@ -49,7 +49,7 @@ void	*routine(void *arg)
 	while (get_seated_philo(thread) == false)
 		;
 	if (thread->nb % 2 == 1)
-		usleep(thread->time_to_eat / 2);
+		usleep((thread->time_to_eat * 1000) / 2);
 	while (simulation_check(thread))
 	{
 		if (!philo_eat(thread))
