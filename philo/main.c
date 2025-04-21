@@ -37,7 +37,7 @@ bool	start_thread(t_thread *thread)
 		index++;
 	}
 	index = 0;
-	set_waiting_philo(thread);
+	set_waiting_philo(&thread[index]);
 	while (index < thread->nb_philos)
 	{
 		if (pthread_join(thread[index].philo, NULL) != 0)
@@ -66,7 +66,8 @@ int	main(int argc, char **argv)
 	if (init_mutex(infos, &forks) == false)
 		return (EXIT_FAILURE);
 	init_thread(thread, infos, forks, argv);
-	start_thread(thread);
+	if (!start_thread(thread))
+		return (free_all(thread, infos, forks, EXIT_FAILURE));
 	free_all(thread, infos, forks, 0);
 	return (EXIT_SUCCESS);
 }

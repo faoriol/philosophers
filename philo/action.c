@@ -49,7 +49,7 @@ bool	philo_think(t_thread *thread)
 
 bool	philo_sleep(t_thread *thread)
 {
-	while (!simulation_check(thread))
+	if (!simulation_check(thread))
 		return (false);
 	mutex_print(thread, "is sleeping", thread->infos->start_time);
 	ft_usleep(thread, thread->time_to_sleep * 1000);
