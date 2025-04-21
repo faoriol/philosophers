@@ -1,6 +1,6 @@
 NAME			=	philo
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CFLAGS			=	-Wall -Wextra -Werror
 
 SRC_DIR			=	./
 OBJ_DIR			=	objs/
@@ -16,7 +16,7 @@ $(OBJ_DIR)%.o: %.c philo.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -I ./ -c $< -o $@
 
 $(NAME): $(OBJS) Makefile philo.h
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -lpthread
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
