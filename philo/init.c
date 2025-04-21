@@ -23,8 +23,8 @@ void	check_args(int argc, char **argv, t_infos *infos)
 	while (argv[index])
 	{
 		value = ft_atol(argv[index++]);
-		if (value < 0)
-			clean_exit(infos, NULL, "error: negative value");
+		if (value <= 0)
+			clean_exit(infos, NULL, "error: negative or null arguments value");
 	}
 }
 
