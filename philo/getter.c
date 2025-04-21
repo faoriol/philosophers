@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:28:10 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/20 15:12:37 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/21 18:36:55 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,16 @@ int	get_is_philo_died(t_thread *thread)
 	return (value);
 }
 
+int	get_table_meal(t_thread *thread)
+{
+	int	value;
+
+	pthread_mutex_lock(thread->infos->table_meal_mutex);
+	value = thread->infos->full_meal;
+	pthread_mutex_unlock(thread->infos->table_meal_mutex);
+	return (value);
+}
+
 int	check_fork(t_fork *fork)
 {
 	pthread_mutex_lock(fork->fork_mutex);
@@ -53,14 +63,4 @@ int	check_fork(t_fork *fork)
 	}
 	pthread_mutex_unlock(fork->fork_mutex);
 	return (0);
-}
-
-int	get_table_meal(t_thread *thread)
-{
-	int	value;
-
-	pthread_mutex_lock(thread->infos->table_meal_mutex);
-	value = thread->infos->full_meal;
-	pthread_mutex_unlock(thread->infos->table_meal_mutex);
-	return (value);
 }

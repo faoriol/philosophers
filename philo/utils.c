@@ -20,25 +20,15 @@ int	get_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	clean_exit(void *data, void *data2, char *msg)
+void	drop_fork(t_thread *thread)
 {
-	if (data)
-		free(data);
-	if (data2)
-		free(data2);
-	if (msg)
-		printf("%s\n", msg);
-	exit(EXIT_FAILURE);
+	pthread_mutex_lock(thread->left_fork->fork_mutex);
+	thread->left_fork->state = true;
+	pthread_mutex_unlock(thread->left_fork->fork_mutex);
+	pthread_mutex_lock(thread->right_fork->fork_mutex);
+	thread->right_fork->state = true;
+	pthread_mutex_unlock(thread->right_fork->fork_mutex);
 }
-
-// void	clean_thread(t_thread *thread)
-// {
-// 	free(thread->infos->forks);
-// 	free(thread->infos->stop_mutex);
-// 	free(thread->infos->meal_mutex);
-// 	free(thread->infos);
-// 	free(thread);
-// }
 
 void	mutex_print(t_thread *thread, char *msg, int start_time)
 {

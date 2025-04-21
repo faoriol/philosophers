@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:52:32 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/20 15:54:16 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/21 18:37:37 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,15 @@ int	free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code)
 	if (threads)
 		free(threads);
 	return (code);
+}
+
+void	clean_exit(void *data, void *data2, char *msg)
+{
+	if (data)
+		free(data);
+	if (data2)
+		free(data2);
+	if (msg)
+		printf("%s\n", msg);
+	exit(EXIT_FAILURE);
 }
