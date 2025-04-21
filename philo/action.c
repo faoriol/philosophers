@@ -35,6 +35,8 @@ bool	philo_eat(t_thread *thread)
 	if (!simulation_check(thread))
 		return (false);
 	ft_usleep(thread, thread->time_to_eat * 1000);
+	if (!simulation_check(thread))
+		return (false);
 	drop_fork(thread);
 	return (true);
 }

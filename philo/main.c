@@ -12,17 +12,14 @@
 
 #include "philo.h"
 
-// void	detach_thread(t_thread *thread)
-// {
-// 	int	index;
+void	detach_thread(t_thread *thread)
+{
+	int	index;
 
-// 	index = 0;
-// 	while (index < thread->infos->nb_philos)
-// 		pthread_mutex_destroy(&thread->infos->forks->fork_mutex[index++]);
-// 	index = 0;
-// 	while (index < thread->infos->nb_philos)
-// 		pthread_detach(thread[index++].philo);
-// }
+	index = 0;
+	while (index < thread->infos->nb_philos)
+		pthread_detach(thread[index++].philo);
+}
 
 bool	start_thread(t_thread *thread)
 {

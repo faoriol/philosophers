@@ -17,14 +17,15 @@ void	check_args(int argc, char **argv, t_infos *infos)
 	int	value;
 	int	index;
 
-	index = 0;
+	index = 1;
 	if (argc < 5)
 		clean_exit(infos, NULL, "error: missing arguments");
 	while (argv[index])
 	{
-		value = ft_atol(argv[index++]);
+		value = ft_atol(argv[index]);
 		if (value <= 0)
 			clean_exit(infos, NULL, "error: negative or null arguments value");
+		index++;
 	}
 }
 
