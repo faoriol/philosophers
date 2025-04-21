@@ -31,7 +31,7 @@ void	check_args(int argc, char **argv, t_infos *infos)
 void	collect_infos(int argc, char **argv, t_infos *infos)
 {
 	check_args(argc, argv, infos);
-	infos->waiting_philo = 0;
+	infos->waiting_philo = false;
 	infos->philo_died = false;
 	infos->start_time = get_time();
 	infos->nb_philos = ft_atol(argv[1]);

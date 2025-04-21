@@ -37,7 +37,7 @@ typedef struct s_infos
 	int				full_meal;
 	bool			philo_died;
 	int				start_time;
-	int				waiting_philo;
+	bool			waiting_philo;
 	pthread_mutex_t	*stop_mutex;
 	pthread_mutex_t	*meal_mutex;
 	pthread_mutex_t	*table_meal_mutex;

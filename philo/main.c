@@ -37,6 +37,7 @@ bool	start_thread(t_thread *thread)
 		index++;
 	}
 	index = 0;
+	set_waiting_philo(thread);
 	while (index < thread->nb_philos)
 	{
 		if (pthread_join(thread[index].philo, NULL) != 0)

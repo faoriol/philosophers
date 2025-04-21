@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 14:15:29 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/20 15:14:15 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/21 14:01:14 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	set_waiting_philo(t_thread *thread)
 {
 	pthread_mutex_lock(thread->infos->wait_mutex);
-	thread->infos->waiting_philo++;
+	thread->infos->waiting_philo = true;
 	pthread_mutex_unlock(thread->infos->wait_mutex);
 }
 
