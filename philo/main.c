@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-void	detach_thread(t_thread *thread)
-{
-	int	index;
-
-	index = 0;
-	while (index < thread->infos->nb_philos)
-		pthread_detach(thread[index++].philo);
-}
-
 bool	start_thread(t_thread *thread)
 {
 	int	index;
@@ -52,14 +43,14 @@ int	main(int argc, char **argv)
 
 	forks = NULL;
 	infos = malloc(sizeof(t_infos));
-	memset(infos, 0, sizeof(t_infos));
 	if (!infos)
 		exit(EXIT_FAILURE);
+	memset(infos, 0, sizeof(t_infos));
 	collect_infos(argc, argv, infos);
 	thread = malloc(sizeof(t_thread) * ft_atol(argv[1]));
-	memset(thread, 0, sizeof(t_thread));
 	if (!thread)
 		return (free_all(NULL, infos, forks, EXIT_FAILURE));
+	memset(thread, 0, sizeof(t_thread));
 	if (init_mutex(infos, &forks) == false)
 		return (EXIT_FAILURE);
 	init_thread(thread, infos, forks, argv);

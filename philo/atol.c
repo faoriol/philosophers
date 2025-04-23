@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   atol.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faoriol <faoriol@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:25:40 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/10 22:07:32 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/23 18:20:38 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 static int	ft_is_w_space(char c)
 {
@@ -42,5 +52,8 @@ long	ft_atol(const char *str)
 		r = r * 10 + str[i] - 48;
 		i++;
 	}
+	if (((r * sign) > INT_MAX || (r * sign) < INT_MIN)
+		&& ft_strlen(str) > 11)
+		return (-1);
 	return (r * sign);
 }

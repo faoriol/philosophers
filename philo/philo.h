@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <string.h>
+# include <limits.h>
 
 typedef struct s_fork
 {
@@ -60,34 +61,54 @@ typedef struct s_thread
 	int				time_to_sleep;
 }				t_thread;
 
+/* action.c */
 bool	philo_eat(t_thread *thread);
 bool	philo_think(t_thread *thread);
 bool	philo_sleep(t_thread *thread);
 void	philo_take(t_thread *thread);
 void	philo_died(t_thread *thread);
-void	clean_exit(void *data, void *data2, char *msg);
-void	check_args(int argc, char **argv, t_infos *infos);
-void	collect_infos(int argc, char **argv, t_infos *infos);
-int		get_time(void);
-bool	simulation_check(t_thread *thread);
-bool	init_thread(t_thread *thread,
-			t_infos *infos, t_fork *forks, char **argv);
+
+/* atol.c */
 long	ft_atol(const char *str);
-void	*routine(void *arg);
-bool	init_mutex(t_infos *infos, t_fork **forks);
-void	mutex_print(t_thread *thread, char *msg, int last_meal);
+
+/* destroy.c */
+void	clean_exit(void *data, void *data2, char *msg);
+int		free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code);
+void	free_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
+void	destroy_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
+
+/* getter.c */
+int		get_table_meal(t_thread *thread);
 int		get_max_meal(t_thread *thread);
-void	set_waiting_philo(t_thread *thread);
 int		get_seated_philo(t_thread *thread);
 int		get_is_philo_died(t_thread *thread);
-void	set_dead_mutex(t_thread *thread);
-int		free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code);
-void	ft_usleep(t_thread *thread, long time_to);
 int		check_fork(t_fork *fork);
+
+/* init.c */
+void	check_args(int argc, char **argv, t_infos *infos);
+void	collect_infos(int argc, char **argv, t_infos *infos);
+bool	alloc_mutex(t_infos *infos, t_fork **forks);
+bool	init_mutex(t_infos *infos, t_fork **forks);
+bool	init_thread(t_thread *thread,
+			t_infos *infos, t_fork *forks, char **argv);
+
+/* main.c */
+bool	start_thread(t_thread *thread);
+
+/* philo.c */
+bool	simulation_check(t_thread *thread);
+void	*routine(void *arg);
+
+/* setter.c */
 void	add_table_meal(t_thread *thread);
-int		get_table_meal(t_thread *thread);
+void	set_waiting_philo(t_thread *thread);
+void	set_dead_mutex(t_thread *thread);
+
+/* utils.c */
+int		get_time(void);
+void	mutex_print(t_thread *thread, char *msg, int last_meal);
+void	ft_usleep(t_thread *thread, long time_to);
 void	*safe_alloc(size_t size, bool *check);
-void	free_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
 void	drop_fork(t_thread *thread);
 
 #endif

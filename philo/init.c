@@ -87,11 +87,11 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 		if (pthread_mutex_init((*forks)[index++].fork_mutex, NULL))
 			return (free_all(NULL, infos, *forks, false));
 	}
-	if (pthread_mutex_init(infos->stop_mutex, NULL)
-		|| pthread_mutex_init(infos->meal_mutex, NULL)
-		|| pthread_mutex_init(infos->print_mutex, NULL)
-		|| pthread_mutex_init(infos->wait_mutex, NULL)
-		|| pthread_mutex_init(infos->table_meal_mutex, NULL))
+	if (pthread_mutex_init(infos->stop_mutex, NULL) != 0
+		|| pthread_mutex_init(infos->meal_mutex, NULL) != 0
+		|| pthread_mutex_init(infos->print_mutex, NULL) != 0
+		|| pthread_mutex_init(infos->wait_mutex, NULL) != 0
+		|| pthread_mutex_init(infos->table_meal_mutex, NULL) != 0)
 		return (free_all(NULL, infos, *forks, false));
 	return (true);
 }
