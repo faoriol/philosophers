@@ -51,8 +51,8 @@ int	main(int argc, char **argv)
 	if (!thread)
 		return (free_all(NULL, infos, forks, EXIT_FAILURE));
 	memset(thread, 0, sizeof(t_thread));
-	if (init_mutex(thread, infos, &forks) == false)
-		return (EXIT_FAILURE);
+	if (init_mutex(infos, &forks) == false)
+		return (free_all(thread, infos, forks, EXIT_FAILURE));
 	init_thread(thread, infos, forks, argv);
 	if (!start_thread(thread))
 		return (free_all(thread, infos, forks, EXIT_FAILURE));

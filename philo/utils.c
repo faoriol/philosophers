@@ -22,19 +22,19 @@ int	get_time(void)
 
 void	drop_fork(t_thread *thread)
 {
-	pthread_mutex_lock(thread->left_fork->fork_mutex);
+	pthread_mutex_lock(&thread->left_fork->fork_mutex);
 	thread->left_fork->state = true;
-	pthread_mutex_unlock(thread->left_fork->fork_mutex);
-	pthread_mutex_lock(thread->right_fork->fork_mutex);
+	pthread_mutex_unlock(&thread->left_fork->fork_mutex);
+	pthread_mutex_lock(&thread->right_fork->fork_mutex);
 	thread->right_fork->state = true;
-	pthread_mutex_unlock(thread->right_fork->fork_mutex);
+	pthread_mutex_unlock(&thread->right_fork->fork_mutex);
 }
 
 void	mutex_print(t_thread *thread, char *msg, int start_time)
 {
-	pthread_mutex_lock(thread->infos->print_mutex);
+	pthread_mutex_lock(&thread->infos->print_mutex);
 	printf("%d %d %s\n", get_time() - start_time, thread->nb, msg);
-	pthread_mutex_unlock(thread->infos->print_mutex);
+	pthread_mutex_unlock(&thread->infos->print_mutex);
 }
 
 void	ft_usleep(t_thread *thread, long time_to)

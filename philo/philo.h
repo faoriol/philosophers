@@ -25,7 +25,7 @@
 typedef struct s_fork
 {
 	bool			state;
-	pthread_mutex_t	*fork_mutex;
+	pthread_mutex_t	fork_mutex;
 }				t_fork;
 
 typedef struct s_infos
@@ -39,11 +39,11 @@ typedef struct s_infos
 	bool			philo_died;
 	int				start_time;
 	bool			waiting_philo;
-	pthread_mutex_t	*stop_mutex;
-	pthread_mutex_t	*meal_mutex;
-	pthread_mutex_t	*table_meal_mutex;
-	pthread_mutex_t	*print_mutex;
-	pthread_mutex_t	*wait_mutex;
+	pthread_mutex_t	stop_mutex;
+	pthread_mutex_t	meal_mutex;
+	pthread_mutex_t	table_meal_mutex;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	wait_mutex;
 }				t_infos;
 
 typedef struct s_thread
@@ -87,8 +87,7 @@ int		check_fork(t_fork *fork);
 /* init.c */
 void	check_args(int argc, char **argv, t_infos *infos);
 void	collect_infos(int argc, char **argv, t_infos *infos);
-bool	alloc_mutex(t_infos *infos, t_fork **forks);
-bool	init_mutex(t_thread *thread, t_infos *infos, t_fork **forks);
+bool	init_mutex(t_infos *infos, t_fork **forks);
 bool	init_thread(t_thread *thread,
 			t_infos *infos, t_fork *forks, char **argv);
 

@@ -16,27 +16,27 @@ bool	simulation_check(t_thread *thread)
 {
 	int		table_meal;
 
-	pthread_mutex_lock(thread->infos->stop_mutex);
+	pthread_mutex_lock(&thread->infos->stop_mutex);
 	if (thread->infos->philo_died == true)
 	{
-		pthread_mutex_unlock(thread->infos->stop_mutex);
+		pthread_mutex_unlock(&thread->infos->stop_mutex);
 		return (false);
 	}
 	if (get_time() - thread->last_meal > thread->time_to_die)
 	{
 		philo_died(thread);
 		thread->infos->philo_died = true;
-		pthread_mutex_unlock(thread->infos->stop_mutex);
+		pthread_mutex_unlock(&thread->infos->stop_mutex);
 		return (false);
 	}
 	table_meal = get_table_meal(thread);
 	if (table_meal == thread->nb_philos)
 	{
 		thread->infos->philo_died = true;
-		pthread_mutex_unlock(thread->infos->stop_mutex);
+		pthread_mutex_unlock(&thread->infos->stop_mutex);
 		return (false);
 	}
-	pthread_mutex_unlock(thread->infos->stop_mutex);
+	pthread_mutex_unlock(&thread->infos->stop_mutex);
 	return (true);
 }
 
