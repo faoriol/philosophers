@@ -88,7 +88,7 @@ int		check_fork(t_fork *fork);
 void	check_args(int argc, char **argv, t_infos *infos);
 void	collect_infos(int argc, char **argv, t_infos *infos);
 bool	alloc_mutex(t_infos *infos, t_fork **forks);
-bool	init_mutex(t_infos *infos, t_fork **forks);
+bool	init_mutex(t_thread *thread, t_infos *infos, t_fork **forks);
 bool	init_thread(t_thread *thread,
 			t_infos *infos, t_fork *forks, char **argv);
 

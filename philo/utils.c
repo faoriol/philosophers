@@ -61,5 +61,6 @@ void	*safe_alloc(size_t size, bool *check)
 		(*check) = false;
 		return (NULL);
 	}
+	memset(data, 0, size);
 	return (data);
 }

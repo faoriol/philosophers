@@ -75,7 +75,7 @@ bool	alloc_mutex(t_infos *infos, t_fork **forks)
 	return (true);
 }
 
-bool	init_mutex(t_infos *infos, t_fork **forks)
+bool	init_mutex(t_thread *thread, t_infos *infos, t_fork **forks)
 {
 	int	index;
 
@@ -85,14 +85,15 @@ bool	init_mutex(t_infos *infos, t_fork **forks)
 	while (index < infos->nb_philos)
 	{
 		if (pthread_mutex_init((*forks)[index++].fork_mutex, NULL))
-			return (free_all(NULL, infos, *forks, false));
+			return (free_all(thread, infos, *forks, false));
 	}
+	index = 0;
 	if (pthread_mutex_init(infos->stop_mutex, NULL) != 0
 		|| pthread_mutex_init(infos->meal_mutex, NULL) != 0
 		|| pthread_mutex_init(infos->print_mutex, NULL) != 0
 		|| pthread_mutex_init(infos->wait_mutex, NULL) != 0
 		|| pthread_mutex_init(infos->table_meal_mutex, NULL) != 0)
-		return (free_all(NULL, infos, *forks, false));
+		return (free_all(thread, infos, *forks, false));
 	return (true);
 }
 
