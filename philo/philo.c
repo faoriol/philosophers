@@ -47,7 +47,7 @@ void	*routine(void *arg)
 	thread = (t_thread *)arg;
 	thread->last_meal = get_time();
 	while (get_seated_philo(thread) == false)
-		;
+		usleep(100);
 	if (thread->nb % 2 == 0)
 		usleep((thread->time_to_eat * 1000) / 2);
 	while (simulation_check(thread))
