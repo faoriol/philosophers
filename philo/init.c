@@ -12,26 +12,37 @@
 
 #include "philo.h"
 
-void	check_args(int argc, char **argv, t_infos *infos)
+bool	check_args(int argc, char **argv)
 {
 	int	value;
 	int	index;
 
 	index = 1;
-	if (argc < 5)
-		clean_exit(infos, NULL, "error: missing arguments");
+	if (argc != 5 && argc != 6)
+	{
+		printf("error: missing arguments\n");
+		return (false);
+	}
 	while (argv[index])
 	{
 		value = ft_atol(argv[index]);
 		if (value <= 0)
-			clean_exit(infos, NULL, "error: negative or null arguments value");
+		{
+			printf("error: negative or null arguments value\n");
+			return (false);
+		}
 		index++;
 	}
+	return (true);
 }
 
-void	collect_infos(int argc, char **argv, t_infos *infos)
+bool	collect_infos(int argc, char **argv, t_infos *infos)
 {
-	check_args(argc, argv, infos);
+	if (!check_args(argc, argv))
+	{
+		free(infos);
+		return (false);
+	}
 	infos->waiting_philo = false;
 	infos->philo_died = false;
 	infos->start_time = get_time();
@@ -44,6 +55,7 @@ void	collect_infos(int argc, char **argv, t_infos *infos)
 		infos->max_meals = ft_atol(argv[5]);
 	else
 		infos->max_meals = -1;
+	return (true);
 }
 
 bool	init_mutex(t_infos *infos, t_fork **forks)

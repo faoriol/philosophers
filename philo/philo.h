@@ -85,8 +85,8 @@ int		get_is_philo_died(t_thread *thread);
 int		check_fork(t_fork *fork);
 
 /* init.c */
-void	check_args(int argc, char **argv, t_infos *infos);
-void	collect_infos(int argc, char **argv, t_infos *infos);
+bool	check_args(int argc, char **argv);
+bool	collect_infos(int argc, char **argv, t_infos *infos);
 bool	init_mutex(t_infos *infos, t_fork **forks);
 bool	init_thread(t_thread *thread,
 			t_infos *infos, t_fork *forks, char **argv);

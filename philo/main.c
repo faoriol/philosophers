@@ -44,9 +44,10 @@ int	main(int argc, char **argv)
 	forks = NULL;
 	infos = malloc(sizeof(t_infos));
 	if (!infos)
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	memset(infos, 0, sizeof(t_infos));
-	collect_infos(argc, argv, infos);
+	if (!collect_infos(argc, argv, infos))
+		return (false);
 	thread = malloc(sizeof(t_thread) * ft_atol(argv[1]));
 	if (!thread)
 		return (free_all(NULL, infos, forks, EXIT_FAILURE));

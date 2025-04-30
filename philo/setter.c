@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 14:15:29 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/25 15:18:58 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/04/29 18:29:10 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	set_dead_mutex(t_thread *thread)
 
 void	add_table_meal(t_thread *thread)
 {
-	pthread_mutex_lock(&thread->infos->meal_mutex);
+	pthread_mutex_lock(&thread->infos->table_meal_mutex);
 	thread->infos->full_meal++;
-	pthread_mutex_unlock(&thread->infos->meal_mutex);
+	pthread_mutex_unlock(&thread->infos->table_meal_mutex);
 }
