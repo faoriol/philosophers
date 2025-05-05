@@ -21,7 +21,7 @@ bool	check_args(int argc, char **argv)
 	if (argc != 5 && argc != 6)
 	{
 		printf("error: ./philo ");
-		printf("nb_philo time_to_die time_to_eat time_to_sleep \"max_meals\"\n");
+		printf("nb time_to_die time_to_eat time_to_sleep \"max_meals\"\n");
 		return (false);
 	}
 	while (argv[index])
