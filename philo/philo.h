@@ -72,7 +72,6 @@ void	philo_died(t_thread *thread);
 long	ft_atol(const char *str);
 
 /* destroy.c */
-void	clean_exit(void *data, void *data2, char *msg);
 int		free_all(t_thread *threads, t_infos *infos, t_fork *forks, int code);
 void	free_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
 void	destroy_mutexes(t_infos *infos, t_fork *forks, int nb_philo);
