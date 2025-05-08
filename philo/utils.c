@@ -17,37 +17,43 @@ int	get_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return ((tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001));
 }
 
-void	drop_fork(t_thread *thread)
+void	drop_fork(t_thread *thread, pthread_mutex_t *left,
+		pthread_mutex_t *right)
 {
-	pthread_mutex_lock(&thread->left_fork->fork_mutex);
+	pthread_mutex_lock(left);
 	thread->left_fork->state = true;
-	pthread_mutex_unlock(&thread->left_fork->fork_mutex);
-	pthread_mutex_lock(&thread->right_fork->fork_mutex);
+	pthread_mutex_unlock(left);
+	pthread_mutex_lock(right);
 	thread->right_fork->state = true;
-	pthread_mutex_unlock(&thread->right_fork->fork_mutex);
+	pthread_mutex_unlock(right);
 }
 
-void	mutex_print(t_thread *thread, char *msg, int start_time)
+bool	mutex_print(t_thread *thread, char *msg, int start_time, t_infos *infos)
 {
-	pthread_mutex_lock(&thread->infos->print_mutex);
+	pthread_mutex_lock(&infos->print_mutex);
+	if (get_is_philo_died(&infos->stop_mutex, &infos->philo_died))
+	{
+		pthread_mutex_unlock(&infos->print_mutex);
+		return (false);
+	}
 	printf("%d %d %s\n", get_time() - start_time, thread->nb, msg);
-	pthread_mutex_unlock(&thread->infos->print_mutex);
+	pthread_mutex_unlock(&infos->print_mutex);
+	return (true);
 }
 
-void	ft_usleep(t_thread *thread, long time_to)
+void	ft_usleep(long time_to, pthread_mutex_t *stop, bool *died)
 {
 	int	time;
 
 	time = get_time();
-	while ((get_time() - time) < (time_to / 1000))
+	while ((get_time() - time) < (time_to * 0.001))
 	{
-		if (!simulation_check(thread))
+		if (get_is_philo_died(stop, died))
 			return ;
-		else
-			usleep(10);
+		usleep(10);
 	}
 }
 

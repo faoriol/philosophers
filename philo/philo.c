@@ -12,49 +12,54 @@
 
 #include "philo.h"
 
-bool	simulation_check(t_thread *thread)
+bool	simulation_check(t_thread *thread, pthread_mutex_t *stop, bool *died)
 {
 	int		table_meal;
 
-	pthread_mutex_lock(&thread->infos->stop_mutex);
-	if (thread->infos->philo_died == true)
-	{
-		pthread_mutex_unlock(&thread->infos->stop_mutex);
-		return (false);
-	}
-	if (get_time() - thread->last_meal > thread->time_to_die)
-	{
-		philo_died(thread);
-		thread->infos->philo_died = true;
-		pthread_mutex_unlock(&thread->infos->stop_mutex);
-		return (false);
-	}
-	table_meal = get_table_meal(thread);
+	table_meal = get_table_meal(&thread->infos->table_meal_mutex,
+			&thread->infos->full_meal);
+	pthread_mutex_lock(stop);
 	if (table_meal == thread->nb_philos)
 	{
 		thread->infos->philo_died = true;
-		pthread_mutex_unlock(&thread->infos->stop_mutex);
+		pthread_mutex_unlock(stop);
 		return (false);
 	}
-	pthread_mutex_unlock(&thread->infos->stop_mutex);
+	else if (*died == true)
+	{
+		pthread_mutex_unlock(stop);
+		return (false);
+	}
+	else if (get_time() - thread->last_meal > thread->time_to_die)
+	{
+		thread->infos->philo_died = true;
+		pthread_mutex_unlock(stop);
+		philo_died(thread);
+		return (false);
+	}
+	pthread_mutex_unlock(stop);
 	return (true);
 }
 
 void	*routine(void *arg)
 {
 	t_thread	*thread;
+	t_infos		*infos;
 
 	thread = (t_thread *)arg;
-	thread->last_meal = get_time();
-	while (get_seated_philo(thread) == false)
+	infos = thread->infos;
+	while (get_seated_philo(&infos->wait_mutex,
+			&infos->waiting_philo) == false)
 		usleep(100);
 	if (thread->nb % 2 == 0)
-		usleep((thread->time_to_eat * 1000) / 2);
-	while (simulation_check(thread))
+		usleep((thread->time_to_eat * 1000) >> 1);
+	thread->last_meal = get_time();
+	while (simulation_check(thread, &infos->stop_mutex,
+			&infos->philo_died))
 	{
-		if (!philo_eat(thread))
+		if (!philo_eat(thread, infos, &infos->stop_mutex))
 			break ;
-		if (!philo_sleep(thread))
+		if (!philo_sleep(thread, infos))
 			break ;
 		if (!philo_think(thread))
 			break ;

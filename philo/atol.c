@@ -6,7 +6,7 @@
 /*   By: faoriol < faoriol@student.42lyon.fr >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:25:40 by faoriol           #+#    #+#             */
-/*   Updated: 2025/04/23 18:20:38 by faoriol          ###   ########.fr       */
+/*   Updated: 2025/05/08 15:20:49 by faoriol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ long	ft_atol(const char *str)
 			sign *= -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i])
 	{
-		r = r * 10 + str[i] - 48;
-		i++;
+		if (str[i] < '0' || str[i] > '9')
+			return (-1);
+		r = r * 10 + str[i++] - 48;
 	}
 	if (((r * sign) > INT_MAX || (r * sign) < INT_MIN)
 		&& ft_strlen(str) > 11)

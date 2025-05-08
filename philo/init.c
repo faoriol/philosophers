@@ -20,7 +20,7 @@ bool	check_args(int argc, char **argv)
 	index = 1;
 	if (argc != 5 && argc != 6)
 	{
-		printf("error: ./philo ");
+		printf("philo: ./philo ");
 		printf("nb time_to_die time_to_eat time_to_sleep \"max_meals\"\n");
 		return (false);
 	}
@@ -29,7 +29,7 @@ bool	check_args(int argc, char **argv)
 		value = ft_atol(argv[index]);
 		if (value <= 0)
 		{
-			printf("error: negative or null arguments value\n");
+			printf("philo: '%s': (error) Invalid Argument\n", argv[index]);
 			return (false);
 		}
 		index++;
