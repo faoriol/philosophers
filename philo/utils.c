@@ -17,7 +17,7 @@ int	get_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001));
+	return ((tv.tv_sec * 1000) + (unsigned int)(tv.tv_usec * 0.001));
 }
 
 void	drop_fork(t_thread *thread, pthread_mutex_t *left,
